@@ -1,9 +1,8 @@
 {
   "person": {
     "name": "Galia Kropach",
-    "role": "Design engineer",
+    "role": "Engineer & educator",
     "intro": "I design interfaces and build them. Ten years of front-end engineering, a background in architecture and visual communication, and a habit of shipping things end to end — from the first Figma frame to the deployed app.",
-    "location": "Tel Aviv",
     "email": "galiakr@gmail.com",
     "github": "https://github.com/galiakr",
     "linkedin": "https://linkedin.com/in/galiakr"
@@ -14,7 +13,10 @@
       "name": "Lega11y",
       "tagline": "Accessibility and compliance scanner",
       "description": "Scans a site and reports where it falls short of accessibility and legal compliance standards. Built to make the audit automatic instead of a checklist someone works through by hand.",
-      "stack": ["Next.js", "TypeScript"],
+      "stack": [
+        "Next.js",
+        "TypeScript"
+      ],
       "live": "",
       "repo": "https://github.com/galiakr/lega11y",
       "role": "Design and build"
@@ -24,7 +26,11 @@
       "name": "CFP Manager",
       "tagline": "Conference submission tracking",
       "description": "A full-stack tool for managing speaking submissions: OAuth sign-in, calendar and mail integrations, and deduplication across sources that list the same call twice.",
-      "stack": ["React", "Node.js", "OAuth"],
+      "stack": [
+        "React",
+        "Node.js",
+        "OAuth"
+      ],
       "live": "",
       "repo": "",
       "role": "Design and build"
@@ -33,18 +39,28 @@
       "id": "math-kingdom",
       "name": "Math Kingdom",
       "tagline": "Mathematics for children",
-      "description": "An educational game that introduces infinity, prime numbers and fractals to kids — concepts usually held back for much later, told through play.",
-      "stack": ["JavaScript"],
-      "live": "",
-      "repo": "",
-      "role": "Design and build"
+      "description": "A bilingual English and Hebrew math adventure for curious kids aged 8+. Explore an illustrated kingdom through playable adventures in infinity, primes, fractals, probability, Fibonacci, topology, and graph theory, with a journal that records discoveries and progress.",
+      "stack": [
+        "React",
+        "TypeScript",
+        "Vite",
+        "i18next",
+        "Tone.js"
+      ],
+      "live": "https://galiakr.github.io/math-kingdom/",
+      "repo": "https://github.com/galiakr/math-kingdom",
+      "role": "Design and build",
+      "embed": "https://galiakr.github.io/math-kingdom/"
     },
     {
       "id": "first-rule",
       "name": "First Rule",
       "tagline": "Civics for children",
       "description": "A village with no rules, and the children who have to write them. A game about how democratic processes actually come about. In progress.",
-      "stack": ["React", "TypeScript"],
+      "stack": [
+        "React",
+        "TypeScript"
+      ],
       "live": "",
       "repo": "",
       "role": "Design and build"
@@ -53,21 +69,73 @@
       "id": "world-cup-galaxy",
       "name": "World Cup Galaxy",
       "tagline": "Bilingual World Cup app for kids",
-      "description": "A free Hebrew and English app following the 2026 World Cup, built for children to navigate on their own.",
-      "stack": ["Next.js", "i18n"],
-      "live": "",
-      "repo": "",
-      "role": "Design and build"
+      "description": "A bilingual Hebrew and English World Cup app for children, with match data, quizzes, score predictions, and a sticker album. Built for kids to explore independently or with their parents, with support for multiple player profiles on a shared device.",
+      "stack": [
+        "Next.js",
+        "TypeScript",
+        "Tailwind CSS",
+        "Supabase",
+        "Zustand"
+      ],
+      "live": "https://world-cup-galaxy.vercel.app/",
+      "repo": "https://github.com/galiakr/world-cup-galaxy",
+      "role": "Design and build",
+      "embed": "https://world-cup-galaxy.vercel.app/"
     },
     {
-      "id": "getonstage",
-      "name": "GetOnStage",
-      "tagline": "Dashboard for conference speakers",
-      "description": "A redesign of the speaker dashboard, built around the gap between a first-time user looking at an empty screen and a returning user with more on their plate than fits.",
-      "stack": ["React", "Figma"],
-      "live": "",
-      "repo": "",
-      "role": "Product design and front end"
+      "id": "8queens",
+      "name": "8 Queens",
+      "tagline": "A chessboard logic puzzle",
+      "description": "Place eight queens on a chessboard so that no two share a row, column, or diagonal. A puzzle about patterns, constraints, and finding a solution.",
+      "stack": [
+        "React",
+        "TypeScript",
+        "Vite"
+      ],
+      "live": "https://galiakr.github.io/8queens/",
+      "repo": "https://github.com/galiakr/8queens",
+      "role": "Design and build",
+      "embed": "https://galiakr.github.io/8queens/"
+    },
+    {
+      "id": "ai-experience-kit",
+      "name": "AI Experience Kit",
+      "tagline": "Hands-on AI learning for parents and kids",
+      "description": "A bilingual English and Hebrew kit for exploring AI together. Three browser mini-games cover AI detection, training a classifier, and building prompts, alongside 11 guided activities families can try together.",
+      "stack": [
+        "JavaScript",
+        "HTML",
+        "CSS"
+      ],
+      "live": "https://galiakr.github.io/ai-experience-starter-kit/",
+      "repo": "https://github.com/galiakr/ai-experience-starter-kit",
+      "role": "Design and build",
+      "embed": "https://galiakr.github.io/ai-experience-starter-kit/"
+    },
+    {
+      "id": "just-dancing",
+      "name": "Just Dancing",
+      "tagline": "A webcam-powered dance-along game",
+      "description": "Follow Head, Shoulders, Knees and Toes and get real-time feedback on your moves. A dance-along game using a Teachable Machine pose model and TensorFlow.js to recognize movement through your webcam.",
+      "stack": [
+        "React",
+        "TypeScript",
+        "Vite",
+        "TensorFlow.js",
+        "Teachable Machine"
+      ],
+      "live": "https://galiakr.github.io/just-dancing/",
+      "repo": "https://github.com/galiakr/just-dancing",
+      "role": "Design and build",
+      "embed": "https://galiakr.github.io/just-dancing/",
+      "requiresCamera": true
     }
+  ],
+  "furtherExplorations": [
+    "ai-experience-kit",
+    "just-dancing",
+    "8queens",
+    "first-rule",
+    "world-cup-galaxy"
   ]
 }

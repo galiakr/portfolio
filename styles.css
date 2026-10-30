@@ -6,3 +6,7 @@
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
 details.other-row{display:block}details.other-row>summary{border:0;padding:0}details.other-row .other-detail{margin-left:65px}details.other-row[open]>summary{padding-bottom:18px}.other-detail .project-links{margin-top:12px}.demo-bottom>span{font-size:10px;color:var(--muted)}
 @media(max-width:700px){details.other-row .other-detail{margin-left:37px}}
+
+.live-preview{margin-top:28px}.live-preview h4{font-size:18px;font-weight:550;margin:0 0 8px}.live-preview>p{font-size:13px}.live-preview iframe{display:block;width:100%;height:820px;border:1px solid var(--rule);border-radius:6px;background:#121d17;margin-top:16px}details.other-row:has(.live-preview) .other-detail{max-width:none}@media(max-width:700px){details.other-row:has(.live-preview) .other-detail{margin-left:0}.live-preview iframe{height:740px}}
+
+.preview-live{padding:0;display:block}.featured-frame{width:100%;height:740px;display:block;border:0;background:var(--paper)}

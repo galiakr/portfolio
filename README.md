@@ -22,3 +22,14 @@ and `assets/` to any static web host.
 The first three featured projects include illustrative interactive demos. Their
 sample content lives in `strings.js`; profile and project descriptions live in
 `projects.json`. The remaining projects expand to show descriptions.
+
+8 Queens embeds the deployed app from `projects.json` → `embed` when its entry
+is expanded. Its source and live links are configured in the same entry. The
+embed requires internet access; it runs the original app without copying its code.
+
+Math Kingdom uses its real live app in the featured section. The app loads
+automatically; the live and source links remain available beside it.
+
+Just Dancing embeds the original webcam game and delegates camera access to
+that frame. Visitors must approve camera access in their browser. Its live app
+link is available if embedded camera access is unsupported.

@@ -10,15 +10,22 @@ function links(project) {
   return `<div class="project-links">${project.live ? `<a href="${esc(project.live)}">${esc(strings.project.open)}</a>` : ''}${project.repo ? `<a href="${esc(project.repo)}">${esc(strings.project.source)}</a>` : ''}</div>`;
 }
 
+function livePreview(project) {
+  if (!project.embed) return '';
+  const url = new URL(project.embed);
+  if (url.protocol !== 'https:') return '';
+  return `<section class="live-preview"><h4>${esc(format(strings.project.liveDemo, project))}</h4><p>${esc(strings.project.frameHelp)}</p>${project.requiresCamera ? `<p class="camera-note">${esc(strings.project.cameraNote)}</p>` : ''}<iframe ${project.requiresCamera ? 'allow="camera"' : ''} data-src="${esc(url.href)}" title="${esc(format(strings.project.frameTitle, project))}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></section>`;
+}
+
 function demo(id) {
   const s = strings.demos;
   if (id === 'lega11y') return `<div class="demo"><div class="demo-top"><b class="demo-brand">${esc(s.audit.brand)}</b><span aria-hidden="true">↗</span></div><h4>${esc(s.audit.label)}</h4><p>${esc(s.audit.intro)}</p><div class="audit-checks">${s.audit.checks.map(label => `<div class="audit-row"><span>${esc(label)}</span><span class="audit-status">${esc(s.audit.pending)}</span></div>`).join('')}</div><div class="demo-actions"><button class="primary" id="auditButton" aria-pressed="false">${esc(s.audit.button)}</button></div><p id="auditMessage" role="status">${esc(s.audit.ready)}</p></div>`;
   if (id === 'cfp-manager') return `<div class="demo"><div class="demo-top"><b class="demo-brand">${esc(s.cfp.brand)}</b><span class="demo-dot" aria-hidden="true"></span></div><h4>${esc(s.cfp.heading)}</h4><p>${esc(s.cfp.intro)}</p><div class="demo-actions" role="group" aria-label="${esc(s.cfp.note)}">${s.cfp.filters.map((label, i) => `<button data-filter="${i}" aria-pressed="${i === 0}">${esc(label)}</button>`).join('')}</div><div id="events" aria-live="polite"></div></div>`;
-  return `<div class="demo"><div class="demo-top"><b class="demo-brand">${esc(s.math.brand)}</b><span aria-hidden="true">✳</span></div><h4>${esc(s.math.heading)}</h4><p>${esc(s.math.intro)}</p><div class="number-grid">${Array.from({length: 30}, (_, i) => `<span class="number">${i + 1}</span>`).join('')}</div><div class="demo-bottom"><button id="primeButton" aria-pressed="false">${esc(s.math.show)}</button><span id="primeMessage" role="status">${esc(s.math.initial)}</span></div></div>`;
+  return '';
 }
 
 function featured(project, index) {
-  return `<article class="project"><div class="project-copy"><span class="project-index">${String(index + 1).padStart(2, '0')} /</span><h3>${esc(project.name)}</h3><p class="tagline">${esc(project.tagline)}</p><p class="description">${esc(project.description)}</p><div class="project-meta"><span>${esc(project.role)}</span><span>${esc(strings.project.roleSeparator)}</span><span>${(project.stack || []).map(esc).join(', ')}</span></div>${links(project)}</div><div class="preview-column"><div class="preview">${demo(project.id)}</div><div class="demo-caption"><span>${esc(strings.project.demo)}</span><span aria-hidden="true">↖ ↗</span></div></div></article>`;
+  return `<article class="project"><div class="project-copy"><span class="project-index">${String(index + 1).padStart(2, '0')} /</span><h3>${esc(project.name)}</h3><p class="tagline">${esc(project.tagline)}</p><p class="description">${esc(project.description)}</p><div class="project-meta"><span>${esc(project.role)}</span><span>${esc(strings.project.roleSeparator)}</span><span>${(project.stack || []).map(esc).join(', ')}</span></div>${links(project)}</div><div class="preview-column"><div class="preview${project.embed ? ' preview-live' : ''}">${project.embed ? `<iframe class="featured-frame" src="${esc(project.embed)}" title="${esc(format(strings.project.frameTitle, project))}" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>` : demo(project.id)}</div><div class="demo-caption"><span>${esc(project.embed ? strings.project.realDemo : strings.project.demo)}</span><span aria-hidden="true">↖ ↗</span></div></div></article>`;
 }
 
 function wireDemos() {
@@ -42,18 +49,7 @@ function wireDemos() {
     document.querySelectorAll('[data-filter]').forEach(b => b.setAttribute('aria-pressed', b === button));
     renderEvents(Number(button.dataset.filter));
   }));
-  const primeButton = document.getElementById('primeButton');
-  primeButton.addEventListener('click', () => {
-    const active = primeButton.getAttribute('aria-pressed') !== 'true';
-    primeButton.setAttribute('aria-pressed', active);
-    primeButton.textContent = active ? strings.demos.math.hide : strings.demos.math.show;
-    document.querySelectorAll('.number').forEach((element, i) => {
-      const n = i + 1;
-      const prime = n > 1 && !Array.from({length: Math.max(0, Math.floor(Math.sqrt(n)) - 1)}, (_, j) => j + 2).some(divisor => n % divisor === 0);
-      element.classList.toggle('prime', active && prime);
-    });
-    document.getElementById('primeMessage').textContent = active ? strings.demos.math.result : strings.demos.math.initial;
-  });
+
 }
 
 fetch('./projects.json', { cache: 'no-cache' })
@@ -65,7 +61,7 @@ fetch('./projects.json', { cache: 'no-cache' })
     const me = data.person;
     document.title = format(strings.title, me);
     document.querySelector('meta[name="description"]').content = format(strings.description, me);
-    for (const [id, text] of Object.entries({ barName: me.name, role: me.role, location: me.location, intro: me.intro, footSmall: me.name })) {
+    for (const [id, text] of Object.entries({ barName: me.name, role: me.role, intro: me.intro, footSmall: me.name })) {
       document.getElementById(id).textContent = text;
     }
     for (const id of ['barMail', 'mailto']) document.getElementById(id).href = `mailto:${me.email}`;
@@ -73,7 +69,17 @@ fetch('./projects.json', { cache: 'no-cache' })
     document.getElementById('barLi').href = me.linkedin;
     const featuredIds = ['lega11y', 'cfp-manager', 'math-kingdom'];
     document.getElementById('plates').innerHTML = featuredIds.map(id => data.projects.find(project => project.id === id)).filter(Boolean).map(featured).join('');
-    document.getElementById('otherProjects').innerHTML = data.projects.filter(project => !featuredIds.includes(project.id)).map((project, index) => `<details class="other-row"><summary class="other-row"><span class="number-label">${String(index + 4).padStart(2, '0')}</span><h3>${esc(project.name)}</h3><p>${esc(project.tagline)}</p><span class="expand" aria-label="${esc(strings.project.expand)}">+</span></summary><div class="other-detail"><p>${esc(project.description)}</p><p>${esc(project.role)} · ${(project.stack || []).map(esc).join(', ')}</p>${links(project)}</div></details>`).join('');
+    document.getElementById('otherProjects').innerHTML = data.furtherExplorations.map(id => data.projects.find(project => project.id === id)).filter(Boolean).map((project, index) => `<details class="other-row"><summary class="other-row"><span class="number-label">${String(index + 4).padStart(2, '0')}</span><h3>${esc(project.name)}</h3><p>${esc(project.tagline)}</p><span class="expand" aria-label="${esc(strings.project.expand)}">+</span></summary><div class="other-detail"><p>${esc(project.description)}</p><p>${[project.role, (project.stack || []).join(', ')].filter(Boolean).map(esc).join(' · ')}</p>${links(project)}${livePreview(project)}</div></details>`).join('');
+    document.querySelectorAll('details.other-row').forEach(details => {
+      details.addEventListener('toggle', () => {
+        if (!details.open) return;
+        const frame = details.querySelector('iframe[data-src]');
+        if (frame) {
+          frame.src = frame.dataset.src;
+          frame.removeAttribute('data-src');
+        }
+      });
+    });
     wireDemos();
   })
   .catch(error => {
