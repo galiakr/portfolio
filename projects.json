@@ -1,0 +1,73 @@
+{
+  "person": {
+    "name": "Galia Kropach",
+    "role": "Design engineer",
+    "intro": "I design interfaces and build them. Ten years of front-end engineering, a background in architecture and visual communication, and a habit of shipping things end to end — from the first Figma frame to the deployed app.",
+    "location": "Tel Aviv",
+    "email": "galiakr@gmail.com",
+    "github": "https://github.com/galiakr",
+    "linkedin": "https://linkedin.com/in/galiakr"
+  },
+  "projects": [
+    {
+      "id": "lega11y",
+      "name": "Lega11y",
+      "tagline": "Accessibility and compliance scanner",
+      "description": "Scans a site and reports where it falls short of accessibility and legal compliance standards. Built to make the audit automatic instead of a checklist someone works through by hand.",
+      "stack": ["Next.js", "TypeScript"],
+      "live": "",
+      "repo": "https://github.com/galiakr/lega11y",
+      "role": "Design and build"
+    },
+    {
+      "id": "cfp-manager",
+      "name": "CFP Manager",
+      "tagline": "Conference submission tracking",
+      "description": "A full-stack tool for managing speaking submissions: OAuth sign-in, calendar and mail integrations, and deduplication across sources that list the same call twice.",
+      "stack": ["React", "Node.js", "OAuth"],
+      "live": "",
+      "repo": "",
+      "role": "Design and build"
+    },
+    {
+      "id": "math-kingdom",
+      "name": "Math Kingdom",
+      "tagline": "Mathematics for children",
+      "description": "An educational game that introduces infinity, prime numbers and fractals to kids — concepts usually held back for much later, told through play.",
+      "stack": ["JavaScript"],
+      "live": "",
+      "repo": "",
+      "role": "Design and build"
+    },
+    {
+      "id": "first-rule",
+      "name": "First Rule",
+      "tagline": "Civics for children",
+      "description": "A village with no rules, and the children who have to write them. A game about how democratic processes actually come about. In progress.",
+      "stack": ["React", "TypeScript"],
+      "live": "",
+      "repo": "",
+      "role": "Design and build"
+    },
+    {
+      "id": "world-cup-galaxy",
+      "name": "World Cup Galaxy",
+      "tagline": "Bilingual World Cup app for kids",
+      "description": "A free Hebrew and English app following the 2026 World Cup, built for children to navigate on their own.",
+      "stack": ["Next.js", "i18n"],
+      "live": "",
+      "repo": "",
+      "role": "Design and build"
+    },
+    {
+      "id": "getonstage",
+      "name": "GetOnStage",
+      "tagline": "Dashboard for conference speakers",
+      "description": "A redesign of the speaker dashboard, built around the gap between a first-time user looking at an empty screen and a returning user with more on their plate than fits.",
+      "stack": ["React", "Figma"],
+      "live": "",
+      "repo": "",
+      "role": "Product design and front end"
+    }
+  ]
+}
