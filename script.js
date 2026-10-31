@@ -17,39 +17,44 @@ function livePreview(project) {
   return `<section class="live-preview"><h4>${esc(format(strings.project.liveDemo, project))}</h4><p>${esc(strings.project.frameHelp)}</p>${project.requiresCamera ? `<p class="camera-note">${esc(strings.project.cameraNote)}</p>` : ''}<iframe ${project.requiresCamera ? 'allow="camera"' : ''} data-src="${esc(url.href)}" title="${esc(format(strings.project.frameTitle, project))}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></section>`;
 }
 
-function demo(id) {
-  const s = strings.demos;
-  if (id === 'lega11y') return `<div class="demo"><div class="demo-top"><b class="demo-brand">${esc(s.audit.brand)}</b><span aria-hidden="true">↗</span></div><h4>${esc(s.audit.label)}</h4><p>${esc(s.audit.intro)}</p><div class="audit-checks">${s.audit.checks.map(label => `<div class="audit-row"><span>${esc(label)}</span><span class="audit-status">${esc(s.audit.pending)}</span></div>`).join('')}</div><div class="demo-actions"><button class="primary" id="auditButton" aria-pressed="false">${esc(s.audit.button)}</button></div><p id="auditMessage" role="status">${esc(s.audit.ready)}</p></div>`;
-  if (id === 'cfp-manager') return `<div class="demo"><div class="demo-top"><b class="demo-brand">${esc(s.cfp.brand)}</b><span class="demo-dot" aria-hidden="true"></span></div><h4>${esc(s.cfp.heading)}</h4><p>${esc(s.cfp.intro)}</p><div class="demo-actions" role="group" aria-label="${esc(s.cfp.note)}">${s.cfp.filters.map((label, i) => `<button data-filter="${i}" aria-pressed="${i === 0}">${esc(label)}</button>`).join('')}</div><div id="events" aria-live="polite"></div></div>`;
-  return '';
+function screenshotGallery(project) {
+  const id = `gallery-${project.id}`;
+  return `<div class="gallery-wrapper"><div class="gallery-controls"><span>${esc(strings.project.galleryHint)}</span><div><button type="button" data-gallery-step="-1" aria-controls="${esc(id)}" disabled>${esc(strings.project.previous)}</button><span class="gallery-position" aria-live="polite">1 / ${project.screenshots.length}</span><button type="button" data-gallery-step="1" aria-controls="${esc(id)}">${esc(strings.project.next)}</button></div></div><div id="${esc(id)}" class="screenshot-gallery" tabindex="0" role="region" aria-label="${esc(format(strings.project.galleryLabel, project))}">${project.screenshots.map(shot => `<figure><img src="${esc(shot.src)}" alt="${esc(shot.caption)}" loading="lazy" width="2698" height="1316"><figcaption>${esc(shot.caption)}</figcaption></figure>`).join('')}</div></div>`;
+}
+
+function wireGalleries() {
+  document.querySelectorAll('.gallery-wrapper').forEach(wrapper => {
+    const gallery = wrapper.querySelector('.screenshot-gallery');
+    const slides = [...gallery.querySelectorAll('figure')];
+    const previous = wrapper.querySelector('[data-gallery-step="-1"]');
+    const next = wrapper.querySelector('[data-gallery-step="1"]');
+    const position = wrapper.querySelector('.gallery-position');
+    const index = () => Math.round(gallery.scrollLeft / (slides[0].getBoundingClientRect().width + 16));
+    const update = () => {
+      const current = Math.max(0, Math.min(slides.length - 1, index()));
+      position.textContent = `${current + 1} / ${slides.length}`;
+      previous.disabled = current === 0;
+      next.disabled = current === slides.length - 1;
+    };
+    for (const button of [previous, next]) button.addEventListener('click', () => {
+      const target = Math.max(0, Math.min(slides.length - 1, index() + Number(button.dataset.galleryStep)));
+      gallery.scrollTo({ left: target * (slides[0].getBoundingClientRect().width + 16), behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+    });
+    gallery.addEventListener('scroll', update, { passive: true });
+    update();
+  });
+}
+
+function projectText(text, project) {
+  const safe = esc(text);
+  if (!project.collaborator) return safe;
+  const { name, url } = project.collaborator;
+  if (new URL(url).protocol !== 'https:') return safe;
+  return safe.replace(esc(name), `<a href="${esc(url)}">${esc(name)}</a>`);
 }
 
 function featured(project, index) {
-  return `<article class="project"><div class="project-copy"><span class="project-index">${String(index + 1).padStart(2, '0')} /</span><h3>${esc(project.name)}</h3><p class="tagline">${esc(project.tagline)}</p><p class="description">${esc(project.description)}</p><div class="project-meta"><span>${esc(project.role)}</span><span>${esc(strings.project.roleSeparator)}</span><span>${(project.stack || []).map(esc).join(', ')}</span></div>${links(project)}</div><div class="preview-column"><div class="preview${project.embed ? ' preview-live' : ''}">${project.embed ? `<iframe class="featured-frame" src="${esc(project.embed)}" title="${esc(format(strings.project.frameTitle, project))}" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>` : demo(project.id)}</div><div class="demo-caption"><span>${esc(project.embed ? strings.project.realDemo : strings.project.demo)}</span><span aria-hidden="true">↖ ↗</span></div></div></article>`;
-}
-
-function wireDemos() {
-  const auditButton = document.getElementById('auditButton');
-  auditButton.addEventListener('click', () => {
-    const active = auditButton.getAttribute('aria-pressed') !== 'true';
-    auditButton.setAttribute('aria-pressed', active);
-    auditButton.textContent = active ? strings.demos.audit.reset : strings.demos.audit.button;
-    document.querySelectorAll('.audit-status').forEach((status, index) => {
-      status.textContent = active ? (index === 2 ? strings.demos.audit.issue : strings.demos.audit.passed) : strings.demos.audit.pending;
-    });
-    document.getElementById('auditMessage').textContent = active ? strings.demos.audit.result : strings.demos.audit.ready;
-  });
-  const renderEvents = index => {
-    document.getElementById('events').innerHTML = strings.demos.cfp.events
-      .filter(event => index === 0 || event.status === strings.demos.cfp.filters[index])
-      .map(event => `<div class="event"><div><strong>${esc(event.name)}</strong><br><small>${esc(event.topic)}</small></div><span class="badge">${esc(event.status)}</span></div>`).join('');
-  };
-  renderEvents(0);
-  document.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => {
-    document.querySelectorAll('[data-filter]').forEach(b => b.setAttribute('aria-pressed', b === button));
-    renderEvents(Number(button.dataset.filter));
-  }));
-
+  return `<article class="project"><div class="project-copy"><span class="project-index">${String(index + 1).padStart(2, '0')} /</span><h3>${esc(project.name)}</h3><p class="tagline">${esc(project.tagline)}</p><p class="description">${esc(project.description)}</p>${project.details ? project.details.map(paragraph => `<p class="description">${projectText(paragraph, project)}</p>`).join('') : ''}${project.notes ? `<ul class="project-notes">${project.notes.map(note => `<li>${esc(note)}</li>`).join('')}</ul>` : ''}<div class="project-meta"><span>${esc(project.role)}</span><span>${esc(strings.project.roleSeparator)}</span><span>${(project.stack || []).map(esc).join(', ')}</span></div>${links(project)}</div><div class="preview-column"><div class="preview${project.previewImage ? ' preview-linked-image' : project.screenshots?.length ? ' preview-screenshots' : project.embed ? ' preview-live' : ''}">${project.previewImage ? `<a class="poc-preview" href="${esc(project.live)}" target="_blank" rel="noopener"><img src="${esc(project.previewImage.src)}" alt="${esc(project.previewImage.alt)}" width="2826" height="1296" loading="lazy"><span>${esc(strings.project.openPoc)}</span></a>` : project.screenshots?.length ? screenshotGallery(project) : project.embed ? `<iframe class="featured-frame" src="${esc(project.embed)}" title="${esc(format(strings.project.frameTitle, project))}" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>` : `<div class="project-live-card"><p class="eyebrow">${esc(project.previewLabel)}</p><h4>${esc(project.name)}</h4><p>${esc(project.previewDescription)}</p><a href="${esc(project.live)}">${esc(strings.project.open)}</a></div>`}</div><div class="demo-caption"><span>${esc(project.screenshots?.length ? strings.project.screenshots : project.embed ? strings.project.realDemo : project.previewLabel)}</span>${project.id === 'cfp-manager' ? '' : '<span aria-hidden="true">↖ ↗</span>'}</div></div></article>`;
 }
 
 fetch('./projects.json', { cache: 'no-cache' })
@@ -61,18 +66,26 @@ fetch('./projects.json', { cache: 'no-cache' })
     const me = data.person;
     document.title = format(strings.title, me);
     document.querySelector('meta[name="description"]').content = format(strings.description, me);
-    for (const [id, text] of Object.entries({ barName: me.name, role: me.role, intro: me.intro, footSmall: me.name })) {
+    for (const [id, text] of Object.entries({ barName: me.name, role: me.role, bio: me.intro, footSmall: me.name })) {
       document.getElementById(id).textContent = text;
     }
+    document.getElementById('intro').replaceChildren(...(me.about || [me.intro]).map(text => {
+      const paragraph = document.createElement('p');
+      paragraph.textContent = text;
+      return paragraph;
+    }));
     for (const id of ['barMail', 'mailto']) document.getElementById(id).href = `mailto:${me.email}`;
     document.getElementById('barGh').href = me.github;
     document.getElementById('barLi').href = me.linkedin;
     const featuredIds = ['lega11y', 'cfp-manager', 'math-kingdom'];
     document.getElementById('plates').innerHTML = featuredIds.map(id => data.projects.find(project => project.id === id)).filter(Boolean).map(featured).join('');
-    document.getElementById('otherProjects').innerHTML = data.furtherExplorations.map(id => data.projects.find(project => project.id === id)).filter(Boolean).map((project, index) => `<details class="other-row"><summary class="other-row"><span class="number-label">${String(index + 4).padStart(2, '0')}</span><h3>${esc(project.name)}</h3><p>${esc(project.tagline)}</p><span class="expand" aria-label="${esc(strings.project.expand)}">+</span></summary><div class="other-detail"><p>${esc(project.description)}</p><p>${[project.role, (project.stack || []).join(', ')].filter(Boolean).map(esc).join(' · ')}</p>${links(project)}${livePreview(project)}</div></details>`).join('');
+    document.getElementById('otherProjects').innerHTML = data.furtherExplorations.map(id => data.projects.find(project => project.id === id)).filter(Boolean).map((project, index) => `<details class="other-row" name="further-explorations"><summary class="other-row"><span class="number-label">${String(index + 4).padStart(2, '0')}</span><h3>${esc(project.name)}</h3><p>${esc(project.tagline)}</p><span class="expand" aria-label="${esc(strings.project.expand)}">+</span></summary><div class="other-detail"><p>${esc(project.description)}</p>${(project.details || []).map(paragraph => `<p>${esc(paragraph)}</p>`).join('')}<p>${[project.role, (project.stack || []).join(', ')].filter(Boolean).map(esc).join(' · ')}</p>${links(project)}${livePreview(project)}</div></details>`).join('');
     document.querySelectorAll('details.other-row').forEach(details => {
       details.addEventListener('toggle', () => {
         if (!details.open) return;
+        document.querySelectorAll('details.other-row').forEach(other => {
+          if (other !== details) other.open = false;
+        });
         const frame = details.querySelector('iframe[data-src]');
         if (frame) {
           frame.src = frame.dataset.src;
@@ -80,7 +93,7 @@ fetch('./projects.json', { cache: 'no-cache' })
         }
       });
     });
-    wireDemos();
+    wireGalleries();
   })
   .catch(error => {
     console.error(strings.errors.console, error);

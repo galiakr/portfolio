@@ -19,8 +19,8 @@ and refresh the page to see changes. Serve the site over HTTP; opening
 For deployment, upload `index.html`, `styles.css`, `script.js`, `strings.js`, `projects.json`,
 and `assets/` to any static web host.
 
-The first three featured projects include illustrative interactive demos. Their
-sample content lives in `strings.js`; profile and project descriptions live in
+Featured projects use real app embeds, actual screenshots, or a link to the working POC.
+UI copy lives in `strings.js`; profile and project descriptions live in
 `projects.json`. The remaining projects expand to show descriptions.
 
 8 Queens embeds the deployed app from `projects.json` → `embed` when its entry
@@ -33,3 +33,8 @@ automatically; the live and source links remain available beside it.
 Just Dancing embeds the original webcam game and delegates camera access to
 that frame. Visitors must approve camera access in their browser. Its live app
 link is available if embedded camera access is unsupported.
+
+CFP Manager is a local-only, single-user internal operations tool for GetOnStage.
+Its featured preview uses the actual screenshots in `assets/screenshots/cfp-manager/`.
+The gallery order and captions are configured in `projects.json`. Use Previous/Next or scroll horizontally through
+the gallery. Images are not links.
