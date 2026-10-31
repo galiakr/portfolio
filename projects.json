@@ -1,7 +1,7 @@
 {
   "person": {
     "name": "Galia Kropach",
-    "role": "Engineer & educator",
+    "role": "Software · Design · Education",
     "intro": "I’m Galia, a software engineer with 10+ years shipping web applications, from large-scale platforms to products I design and build end to end. I bring a designer’s eye to the interface and an engineer’s care to what makes it work.",
     "email": "galiakr@gmail.com",
     "github": "https://github.com/galiakr",
@@ -16,7 +16,7 @@
     {
       "id": "lega11y",
       "name": "Lega11y",
-      "tagline": "Website scanner & paper trail audit",
+      "tagline": "Compliance firewall & paper trail audit",
       "description": "Lega11y scans websites for accessibility, privacy, security, and copyright issues, mapping each finding to the laws it touches in Israel, the EU, or the US. The focus is the paper trail: evidence that you knew about an issue and acted on it.",
       "stack": [
         "Next.js",
@@ -28,7 +28,7 @@
       "role": "Co-founder · Development",
       "details": [
         "Every scan is saved as a record that cannot be changed, tied to a verified identity and an ownership declaration. The aim is to document awareness and action when a legal letter arrives.",
-        "The tool also suggests fixes for issues it finds, drafts an AI-generated first reply to a legal letter, and provides a compliance certificate.",
+        "The tool also suggests fixes for issues it finds, drafts an AI-generated first response to a legal letter, and provides a compliance certificate.",
         "A working POC built with my co-founder, Ran Bar-Zik."
       ],
       "previewLabel": "Working POC",
@@ -191,8 +191,7 @@
       "embed": "https://galiakr.github.io/just-dancing/",
       "requiresCamera": true,
       "details": [
-        "Teachable Machine trains the pose classifier and loads the model. Its pose models build on PoseNet for skeleton keypoint estimation.",
-        "TensorFlow.js (@tensorflow/tfjs) is pinned to 1.3.1, with npm overrides also pinning tfjs-core and tfjs-converter. Browser webcam capture supplies the video input."
+        "Teachable Machine trains the pose classifier and loads the model. Its pose models build on PoseNet for skeleton keypoint estimation."
       ]
     },
     {
